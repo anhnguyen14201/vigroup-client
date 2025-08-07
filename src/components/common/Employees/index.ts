@@ -1,0 +1,6 @@
+export { default as employeeClient } from './employeeClient'
+export { default as EmployeeSideBar } from './EmployeeSideBar'
+export { default as EmployeeLoginPage } from './EmployeeLoginPage'
+export { default as EmployeeProfile } from './EmployeeProfile'
+export { default as EmployeeTimeKeeping } from './EmployeeTimeKeeping'
+export { default as EmployeeDetailPage } from './EmployeeDetailPage'
