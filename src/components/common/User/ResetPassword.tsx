@@ -59,7 +59,6 @@ const ResetPassword = () => {
       } catch (error: any) {
         // Nếu là lỗi từ Axios
         if (error) {
-          console.log(error)
           const status = error.response?.status
           if (status === 410) {
             // Token hết hạn

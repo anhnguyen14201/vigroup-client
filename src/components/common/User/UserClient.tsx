@@ -156,7 +156,6 @@ const UserClient: React.FC = () => {
     }
     try {
       nProgress.start()
-      console.log(payload)
       await apiUpdateByUser(payload, current._id)
       if (changePwd) {
         toast.success(t('account.changePasswordSuccess'))

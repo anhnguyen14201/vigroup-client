@@ -67,7 +67,6 @@ const UserClient: React.FC = () => {
   const initialFormData = selectedUser
     ? mapUserToRegisterForm(selectedUser)
     : undefined
-  console.log('user', selectedUser)
   return (
     <div className='flex flex-1 p-5'>
       <DataTable

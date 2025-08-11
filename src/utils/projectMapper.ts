@@ -17,6 +17,7 @@ interface Project {
   translations: Translation[]
   location?: string
   showProject?: string
+  nightShiftPay?: string
   projectType: string | { _id: string }
 }
 
@@ -24,6 +25,7 @@ interface Project {
 export interface ProjectFormValues {
   code: string
   location: string
+  nightShiftPay?: string
   projectType: string
   thumbnail?: File
   images: File[]
@@ -38,6 +40,7 @@ export const mapProjectToForm = (
     code: proj.code ?? '',
     showProject: proj.showProject ?? '',
     location: proj.location ?? '',
+    nightShiftPay: proj.nightShiftPay ?? '',
     projectType:
       typeof proj.projectType === 'string'
         ? proj.projectType

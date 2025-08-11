@@ -69,8 +69,6 @@ const EmployeeClient: React.FC = () => {
     },
   )
 
-  console.log(employees)
-
   const openModalForDate = async (dateStr: string) => {
     setSelectedDate(dateStr)
   }
@@ -120,7 +118,6 @@ const EmployeeClient: React.FC = () => {
     ? mapEmployeeToRegisterForm(selectedUser)
     : undefined
 
-  console.log(selectedUser)
   return (
     <div className='flex flex-1 p-5 flex-col'>
       <div className='flex justify-center mb-4'>

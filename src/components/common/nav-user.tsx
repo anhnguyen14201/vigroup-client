@@ -23,6 +23,7 @@ import { persistor, RootState } from '@/redux/redux'
 import { logout, setLoading } from '@/redux'
 import { apiLogout } from '@/api'
 import { useState } from 'react'
+import nProgress from 'nprogress'
 
 export function NavUser() {
   const { isMobile } = useSidebar()
@@ -33,17 +34,17 @@ export function NavUser() {
 
   async function handleLogout() {
     dispatch(setLoading({ key: 'logout', value: true }))
+    nProgress.start()
     try {
       await apiLogout()
       dispatch(logout())
-      await persistor.flush()
-
       router.push('/')
+      await persistor.flush()
     } catch (error: any) {
-      console.error('Logout failed:', error)
       // Optionally show a toast or error notification here
     } finally {
       dispatch(setLoading({ key: 'logout', value: false }))
+      nProgress.done()
     }
   }
   const [menuOpen, setMenuOpen] = useState(false)

@@ -219,7 +219,7 @@ const EmployeeTimeKeeping = () => {
             end: (() => {
               const nextDay = new Date()
               nextDay.setDate(nextDay.getDate() + 1)
-              return nextDay.toISOString().split('T')[0]
+              return formatDate(nextDay)
             })(),
           }}
           events={events}

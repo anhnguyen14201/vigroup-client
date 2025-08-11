@@ -2,7 +2,7 @@
 
 export interface FormField {
   name: string // giờ dùng string thay vì keyof IProject để linh hoạt
-  type: 'text' | 'select' | 'textarea' | 'editor' | 'file' | 'switch' // 'editor' dùng cho rich text editor
+  type: 'text' | 'select' | 'textarea' | 'editor' | 'file' | 'switch' | 'number' // 'editor' dùng cho rich text editor
   label: string
   placeholder?: string
   defaultValue?: any
@@ -110,6 +110,13 @@ export function getProjectFormFields(
     label: 'Hiển thị dự án?',
     type: 'switch',
     defaultValue: false,
+  })
+
+  fields.push({
+    name: 'nightShiftPay',
+    label: 'Lương ca đêm',
+    placeholder: 'Nhập lương cho ca đêm',
+    type: 'number',
   })
 
   fields.push({

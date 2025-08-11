@@ -239,8 +239,6 @@ const Installation = () => {
     return arr
   }, [languages])
 
-  console.log(currentLang)
-
   return (
     <div className='flex flex-1 p-5 flex-col'>
       <DataTable

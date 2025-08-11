@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import Link from 'next/link'
 import clsx from 'clsx'
 import {
@@ -11,12 +11,13 @@ import {
   CircleUserRound,
 } from 'lucide-react'
 import { useParams, usePathname } from 'next/navigation'
-import { useNavigationLinks } from '@/hooks'
+import { useLogos, useNavigationLinks } from '@/hooks'
 import { motion, AnimatePresence } from 'framer-motion'
 import LanguageSwitcher from '@/components/common/Headers/LanguageSwitcher'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/redux/redux'
 import { useTranslations } from 'next-intl'
+import Image from 'next/image'
 
 export default function SidebarMenu() {
   const pathname = usePathname()
@@ -56,6 +57,15 @@ export default function SidebarMenu() {
     ? `/${locale}/account/user/${currentUser._id}`
     : '/account'
 
+  const { items: logos, isLoading } = useLogos()
+
+  const { urlLogoWhite } = useMemo(() => {
+    const white = logos.find(l => l.logoType === 'logoBlack')
+    return {
+      urlLogoWhite: white?.imageUrls?.[0] || '',
+    }
+  }, [logos])
+
   return (
     <>
       {/* Toggle Button for mobile/tablet */}
@@ -91,7 +101,20 @@ export default function SidebarMenu() {
             >
               <div>
                 <div className='flex items-center justify-between p-4 border-b'>
-                  <h2 className='text-lg font-semibold'>Menu</h2>
+                  {urlLogoWhite && (
+                    <div className='relative w-24 h-10'>
+                      {/* đặt kích thước phù hợp */}
+                      <Image
+                        src={urlLogoWhite}
+                        alt='Logo'
+                        fill
+                        sizes='100px'
+                        className='object-contain transition-opacity duration-500'
+                        priority
+                        placeholder='empty'
+                      />
+                    </div>
+                  )}
                   <button
                     type='button'
                     onClick={() => setOpen(false)}

@@ -123,8 +123,6 @@ const ProductManager = () => {
     [productBrands, productCategories, languages],
   )
 
-  console.log(products)
-
   return (
     <div className='flex flex-1 p-5 flex-col'>
       <DataTable

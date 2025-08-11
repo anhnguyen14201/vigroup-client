@@ -118,6 +118,7 @@ export default function useProjectActions({
           formData.append('location', values.location)
           formData.append('projectType', values.projectType)
           formData.append('showProject', values.showProject)
+          formData.append('nightShiftPay', values.nightShiftPay)
           formData.append(
             'removedImageUrls',
             JSON.stringify(values.removedImageUrls),
@@ -143,6 +144,7 @@ export default function useProjectActions({
             code: values.code,
             location: values.location,
             projectType: values.projectType,
+            nightShiftPay: values.nightShiftPay,
             showProject: values.showProject,
             removedImageUrls: values.removedImageUrls || [],
             translations,

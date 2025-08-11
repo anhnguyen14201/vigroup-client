@@ -235,54 +235,113 @@ const ProjectDetailPage: React.FC = () => {
           ))}
         </div>
 
-        <details className=''>
-          <summary className='cursor-pointer text-blue-600 underline'>
-            Xem chi tiết chấm công
+        <details className='group bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-lg p-3'>
+          <summary className='flex items-center justify-between cursor-pointer select-none'>
+            <div className='flex items-center gap-2'>
+              <h4 className='text-sm font-semibold text-gray-800 dark:text-gray-100'>
+                Xem chi tiết chấm công
+              </h4>
+              <span className='text-xs text-gray-500'>
+                ({sortedRecords.length} ngày)
+              </span>
+            </div>
           </summary>
-          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-4'>
-            {sortedRecords.map((rec: any) => (
-              <div key={rec._id} className='bg-white border rounded-lg p-4'>
-                <div className='mb-2 text-sm text-gray-700 dark:text-gray-200'>
-                  <p>
-                    <strong>Ngày:</strong> {formatDateCZ(rec.date)}
-                  </p>
-                  <p>
-                    <strong>Tổng giờ:</strong> {rec.totalHours.toFixed(2)} giờ —{' '}
-                    {formatCurrency(rec.salary, 203)}
-                  </p>
-                </div>
 
-                <ul className='list-decimal list-inside space-y-1 text-sm text-gray-800 dark:text-white'>
-                  {rec.shifts.map((s: any) => {
-                    const shiftNumberMatch = s.shift?.match(/(\d+)$/)
-                    const shiftLabel = shiftNumberMatch
-                      ? `Ca ${shiftNumberMatch[1]}`
-                      : `Ca ${s.shift}`
+          <div
+            className={`mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4`}
+            style={{
+              // nếu nhiều hơn maxVisible thì giới hạn chiều cao để bật scrollbar
 
-                    return (
-                      <li key={s._id}>
-                        <strong>{shiftLabel}:</strong> từ&nbsp;
-                        <code className='bg-gray-100 dark:bg-gray-700 px-1 rounded'>
-                          {formatTimeCZ(s.checkIn)}
-                        </code>{' '}
-                        đến&nbsp;
-                        <code className='bg-gray-100 dark:bg-gray-700 px-1 rounded'>
-                          {s.checkOut
-                            ? formatTimeCZ(s.checkOut)
-                            : '– chưa kết thúc –'}
-                        </code>{' '}
-                        ({s.totalShiftHours.toFixed(2)} giờ)
-                        {s.notes && (
-                          <div className='mt-1 text-gray-600 italic dark:text-gray-400'>
-                            <strong>Ghi chú:</strong> {s.notes}
+              WebkitOverflowScrolling: 'touch',
+            }}
+          >
+            {sortedRecords.map((rec: any) => {
+              const totalHours = Number(rec.totalHours || 0).toFixed(2)
+              return (
+                <article
+                  key={rec._id}
+                  className='bg-gradient-to-b from-white/60 to-white/40 border border-gray-100 rounded-lg p-4'
+                >
+                  <div className='flex justify-between border-b pb-1'>
+                    <div className='text-sm font-semibold text-gray-800 dark:text-gray-100'>
+                      {formatDateCZ(rec.date)}
+                    </div>
+                    <div className='text-xs text-gray-500 mt-1'>
+                      <span className='font-medium text-gray-700 dark:text-gray-200'>
+                        {totalHours} giờ
+                      </span>{' '}
+                      —{' '}
+                      <span className='font-medium text-emerald-600 dark:text-emerald-400'>
+                        {formatCurrency(rec.salary, 203)}
+                      </span>
+                    </div>
+                  </div>
+
+                  <ul className='divide-y divide-gray-100 dark:divide-gray-800'>
+                    {rec.shifts.map((s: any) => {
+                      const shiftLabel =
+                        s.shift === 'shift1'
+                          ? 'Ca ngày'
+                          : s.shift === 'shift2'
+                          ? 'Ca đêm'
+                          : `Ca ${s.shift || ''}`
+
+                      return (
+                        <li
+                          key={s._id}
+                          className='py-2 text-sm text-gray-700 dark:text-gray-200'
+                        >
+                          <div className='flex w-full flex-col items-start justify-between'>
+                            <div className='flex justify-between w-full'>
+                              <div className='font-medium truncate'>
+                                {shiftLabel}
+                              </div>
+                              <div className='text-xs text-gray-500 mt-0.5'>
+                                {formatTimeCZ(s.checkIn)} —{' '}
+                                {s.checkOut
+                                  ? formatTimeCZ(s.checkOut)
+                                  : '– chưa kết thúc –'}
+                              </div>
+                            </div>
+
+                            <div className='flex justify-between w-full'>
+                              <div className='text-sm font-semibold'>
+                                {Number(s.totalShiftHours || 0).toFixed(2)}h
+                              </div>
+                              <div className='text-sm font-semibold'>
+                                {s.dayShiftHourlyRate
+                                  ? `${formatCurrency(
+                                      s.dayShiftHourlyRate,
+                                      203,
+                                    )}/h`
+                                  : s.nightShiftHourlyRate
+                                  ? `${formatCurrency(
+                                      s.nightShiftHourlyRate,
+                                      203,
+                                    )}/h`
+                                  : ''}
+                              </div>
+                              <div className='text-sm font-semibold'>
+                                {formatCurrency(s.salaryForShift, 203)}
+                              </div>
+                            </div>
                           </div>
-                        )}
-                      </li>
-                    )
-                  })}
-                </ul>
-              </div>
-            ))}
+
+                          {s.notes && (
+                            <div className='text-sm'>
+                              <span className='font-semibold'>Ghi chú:</span>{' '}
+                              <span className='text-gray-600 dark:text-gray-400 italic'>
+                                {s.notes}
+                              </span>
+                            </div>
+                          )}
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </article>
+              )
+            })}
           </div>
         </details>
       </div>

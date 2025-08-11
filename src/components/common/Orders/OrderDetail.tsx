@@ -47,8 +47,6 @@ const OrderDetail = () => {
   const [loadingInvoiceBank, setLoadingInvoiceBank] = useState(false)
   const [loadingInvoiceCash, setLoadingInvoiceCash] = useState(false)
 
-  console.log(orderData)
-
   const raw = orderData?.createdAt as string
   const date = new Date(raw)
   let formattedDate

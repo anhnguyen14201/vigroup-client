@@ -4,9 +4,11 @@ import Image from 'next/image'
 import React, { ChangeEvent, useMemo, useState } from 'react'
 
 import { useAttendanceByMonth, useLogos } from '@/hooks'
-import { CalendarIcon } from 'lucide-react'
+import { CalendarIcon, ChevronDown } from 'lucide-react'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/redux/redux'
+import { motion, AnimatePresence } from 'framer-motion'
+
 import { formatCurrency, formatDateCZ, formatPhone } from '@/utils'
 
 const EmployeeProfile = () => {
@@ -54,6 +56,70 @@ const EmployeeProfile = () => {
     { label: 'Số giờ làm', value: totalHours.toFixed(2) },
     { label: 'Lương', value: formatCurrency(totalSalary.toFixed(2), 203) },
   ]
+
+  const groupedByDate = useMemo(() => {
+    const map: Record<
+      string,
+      {
+        date: string
+        dayShift: { hours: number; salary: number; rate: number | null }
+        nightShift: { hours: number; salary: number; rate: number | null }
+      }
+    > = {}
+
+    monthlyRecords?.forEach((rec: any) => {
+      // nếu rec là ngày có mảng shifts, dùng mảng đó; nếu rec là ca đơn lẻ thì bọc vào mảng
+      const shifts = Array.isArray(rec.shifts) ? rec.shifts : [rec]
+
+      // lấy key ngày: ưu tiên rec.date (nếu có), else lấy checkIn của ca đầu
+      const baseDate = rec.date ?? shifts[0]?.checkIn
+      if (!baseDate) return // không đủ dữ liệu
+
+      const dateKey = new Date(baseDate).toISOString().slice(0, 10)
+
+      if (!map[dateKey]) {
+        map[dateKey] = {
+          date: dateKey,
+          dayShift: { hours: 0, salary: 0, rate: null },
+          nightShift: { hours: 0, salary: 0, rate: null },
+        }
+      }
+
+      const item = map[dateKey]
+
+      // xử lý từng ca trong ngày
+      shifts.forEach((s: any) => {
+        const hours = Number(s.totalShiftHours ?? 0)
+        const salary = Number(s.salaryForShift ?? 0)
+
+        if (s.dayShiftHourlyRate && s.dayShiftHourlyRate > 0) {
+          item.dayShift.hours += hours
+          item.dayShift.salary += salary
+          // giữ rate đầu tiên tìm được (không ghi đè nếu đã có)
+          if (!item.dayShift.rate) item.dayShift.rate = s.dayShiftHourlyRate
+        } else if (s.nightShiftHourlyRate && s.nightShiftHourlyRate > 0) {
+          item.nightShift.hours += hours
+          item.nightShift.salary += salary
+          if (!item.nightShift.rate)
+            item.nightShift.rate = s.nightShiftHourlyRate
+        } else {
+          // fallback: dựa vào tên shift nếu có
+          const shName = String(s.shift ?? '').toLowerCase()
+          if (shName.includes('night') || shName.includes('shift2')) {
+            item.nightShift.hours += hours
+            item.nightShift.salary += salary
+          } else {
+            item.dayShift.hours += hours
+            item.dayShift.salary += salary
+          }
+        }
+      })
+    })
+
+    // sort ngày (mặc định giảm dần)
+    return Object.values(map).sort((a, b) => (a.date < b.date ? 1 : -1))
+  }, [monthlyRecords])
+  const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   return (
     <div>
@@ -126,18 +192,139 @@ const EmployeeProfile = () => {
                 Chưa có dữ liệu trong tháng này
               </p>
             ) : (
-              <div className='overflow-y-auto'>
-                {monthlyRecords?.map((rec: any) => (
-                  <div
-                    key={rec.date}
-                    className='flex justify-between py-2 border-b last:border-none border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300'
-                  >
-                    <span>{formatDateCZ(rec.date)}</span>
-                    <span>{formatCurrency(rec.hourlyRate, 203)}/Giờ</span>
-                    <span>{rec.totalHours.toFixed(2)} Giờ</span>
-                    <span>{formatCurrency(rec.salary, 203)}</span>
-                  </div>
-                ))}
+              <div className='space-y-3'>
+                {groupedByDate.map((rec, idx) => {
+                  const totalSalary =
+                    rec.dayShift.salary + rec.nightShift.salary
+                  const totalHours = rec.dayShift.hours + rec.nightShift.hours
+                  const isOpen = openIndex === idx
+
+                  return (
+                    <article
+                      key={rec.date}
+                      className='bg-white dark:bg-gray-900 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800'
+                    >
+                      {/* header */}
+                      <button
+                        onClick={() => setOpenIndex(isOpen ? null : idx)}
+                        className='w-full flex items-center justify-between gap-2 px-4 py-3 md:py-4 md:px-5'
+                        aria-expanded={isOpen}
+                      >
+                        <div className='flex items-start gap-3'>
+                          <div className='flex-shrink-0'>
+                            <div className='w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-400 to-emerald-600 text-white flex items-center justify-center text-sm font-semibold'>
+                              {new Date(rec.date).getDate()}
+                            </div>
+                          </div>
+                          <div className='text-left'>
+                            <div className='text-sm md:text-base font-semibold text-gray-800 dark:text-gray-100'>
+                              {formatDateCZ(rec.date)}
+                            </div>
+                            <div className='text-xs text-gray-500 dark:text-gray-400'>
+                              Tổng giờ: {totalHours.toFixed(2)} giờ
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className='flex items-center gap-3'>
+                          <div className='text-sm md:text-base font-semibold text-emerald-600 dark:text-emerald-400'>
+                            {formatCurrency(totalSalary, 203)}
+                          </div>
+                          <motion.span
+                            animate={{ rotate: isOpen ? 180 : 0 }}
+                            transition={{ duration: 0.18 }}
+                            className='text-gray-400 dark:text-gray-500'
+                          >
+                            <ChevronDown size={18} />
+                          </motion.span>
+                        </div>
+                      </button>
+
+                      {/* content (collapsible) */}
+                      <AnimatePresence initial={false}>
+                        {isOpen && (
+                          <motion.section
+                            key='content'
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.22 }}
+                            className='px-4 pb-4 md:px-5 md:pb-5'
+                          >
+                            <div className='grid grid-cols-1 gap-2'>
+                              {/* Day card */}
+                              <div className='p-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-800'>
+                                <div className='flex items-center justify-between'>
+                                  <div className='text-sm text-gray-500'>
+                                    Ca ngày
+                                  </div>
+                                </div>
+
+                                <div className='flex justify-between items-end gap-2'>
+                                  <div>
+                                    <div className='text-sm font-semibold text-gray-800'>
+                                      {rec.dayShift.rate
+                                        ? `${formatCurrency(
+                                            rec.dayShift.rate,
+                                            203,
+                                          )}/Giờ`
+                                        : '-'}
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <div className='text-sm font-semibold text-gray-800 dark:text-gray-100'>
+                                      {rec.dayShift.hours.toFixed(2)} Giờ
+                                    </div>
+                                  </div>
+
+                                  <div className='text-right'>
+                                    <div className='text-sm font-semibold text-gray-800 dark:text-gray-100'>
+                                      {formatCurrency(rec.dayShift.salary, 203)}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Night card */}
+                              <div className='p-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-800'>
+                                <div className='flex items-center justify-between'>
+                                  <div className='text-sm text-gray-500'>
+                                    Ca đêm
+                                  </div>
+                                </div>
+
+                                <div className='flex justify-between items-end gap-2'>
+                                  <div className='text-sm font-semibold text-gray-800'>
+                                    {rec.nightShift.rate
+                                      ? `${formatCurrency(
+                                          rec.nightShift.rate,
+                                          203,
+                                        )}/Giờ`
+                                      : '-'}
+                                  </div>
+                                  <div>
+                                    <div className='text-sm font-semibold text-gray-800 dark:text-gray-100'>
+                                      {rec.nightShift.hours.toFixed(2)} Giờ
+                                    </div>
+                                  </div>
+
+                                  <div className='text-right'>
+                                    <div className='text-sm font-semibold text-gray-800 dark:text-gray-100'>
+                                      {formatCurrency(
+                                        rec.nightShift.salary,
+                                        203,
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </motion.section>
+                        )}
+                      </AnimatePresence>
+                    </article>
+                  )
+                })}
               </div>
             )}
           </section>
