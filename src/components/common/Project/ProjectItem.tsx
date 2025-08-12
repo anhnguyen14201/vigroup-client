@@ -4,7 +4,7 @@
 import React from 'react'
 import Image from 'next/image'
 import { useLocale } from 'next-intl'
-import { ArrowUpRight, Building } from 'lucide-react'
+import { ArrowUpRight, Building, MapPin } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { useGetContentTranslation } from '@/hooks'
@@ -112,6 +112,10 @@ const ProjectItem: React.FC<ProjectItemProps> = ({ templates, url }) => {
                         <p className='text-sm flex items-center gap-1'>
                           <Building className='w-4 h-4' />
                           {trans?.buildingType}
+                        </p>
+                        <p className='text-sm flex items-center gap-1'>
+                          <MapPin className='w-4 h-4' />
+                          {template?.location}
                         </p>
                       </div>
                     </>

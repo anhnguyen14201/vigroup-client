@@ -40,7 +40,7 @@ const ProjectDetail = ({ data }: ProductDetailProps) => {
 
   return (
     <>
-      <div className='max-w-screen-xl mx-auto px-4 sm:px-6 xl:mb-20 mb-10'>
+      <div className='max-w-screen-2xl mx-auto px-4 sm:px-6 xl:mb-20 mb-10'>
         {/* Breadcrumb */}
         <div className='py-4'>
           <UIBreadcrumb>
