@@ -9,7 +9,7 @@ import { Oswald, Outfit } from 'next/font/google'
 
 import '@/styles/globals.css'
 
-import { ProgressProvider, ReduxProvider } from '@/providers'
+import { AppInitializer, ProgressProvider, ReduxProvider } from '@/providers'
 import {
   Footer,
   Header,
@@ -62,9 +62,7 @@ export default async function LocaleLayout({
       <body suppressHydrationWarning className='font-outfit'>
         <Toaster />
         <ReduxProvider>
-          {/*           <AppInitializer />
-           */}{' '}
-          {/* Đảm bảo truyền cả locale và messages cho provider */}
+          <AppInitializer />
           <NextIntlClientProvider locale={locale} messages={messages}>
             <Header />
             <InitialLoader>
