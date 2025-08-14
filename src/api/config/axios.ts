@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { apiRefreshToken } from '@/api/authApi'
-import { updateToken } from '@/redux'
+import { apiLogout, apiRefreshToken } from '@/api/authApi'
+import { logout, updateToken } from '@/redux'
 import { store } from '@/redux/redux'
 /* import { store } from '../Redux/redux'
 import { logout, updateToken } from '../Redux/UserStore/userStoreSlice'
@@ -56,7 +56,7 @@ instance.interceptors.response.use(
 
       originalReq._retry = true
       isRefreshing = true
-      try {
+      /*       try {
         const { data } = await apiRefreshToken()
         const newToken = data.accessToken
 
@@ -70,6 +70,37 @@ instance.interceptors.response.use(
         }
       } catch (refreshError) {
         processQueue(refreshError, null)
+        window.location.href = '/account'
+        return Promise.reject(refreshError)
+      } finally {
+        isRefreshing = false
+      } */
+
+      try {
+        // IMPORTANT: call refresh using a raw axios (without interceptors)
+        const { data } = await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URI}/auth/refresh`,
+          {},
+          { withCredentials: true },
+        )
+
+        const newToken = data?.accessToken
+        if (newToken) {
+          store.dispatch(updateToken({ token: newToken }))
+          instance.defaults.headers.common[
+            'Authorization'
+          ] = `Bearer ${newToken}`
+          processQueue(null, newToken)
+          originalReq.headers['Authorization'] = `Bearer ${newToken}`
+          return instance(originalReq)
+        } else {
+          throw new Error('No token in refresh response')
+        }
+      } catch (refreshError) {
+        processQueue(refreshError, null)
+        // clear auth state then redirect
+        store.dispatch(logout()) // hoặc dispatch logout action cụ thể
+        apiLogout()
         window.location.href = '/account'
         return Promise.reject(refreshError)
       } finally {

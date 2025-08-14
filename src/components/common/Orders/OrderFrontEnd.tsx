@@ -79,6 +79,20 @@ const OrderFrontEnd = () => {
       onLoaded()
     }
   }, [isLoading, onLoading, onLoaded])
+
+  if (!isLoading && totalItems === 0) {
+    return (
+      <div className='mb-20'>
+        <div className='flex flex-col items-center justify-center py-16 border rounded-3xl bg-white'>
+          <p className='text-gray-500 mt-1'>
+            {t('order.emptyHint') ||
+              'Bạn chưa đặt đơn hàng nào. Tiếp tục mua sắm nhé!'}
+          </p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className='space-y-6 mb-20'>
       {orders.map(order => {
@@ -97,6 +111,10 @@ const OrderFrontEnd = () => {
           (sum: number, item: any) => sum + item.quantity,
           0,
         )
+
+        const shippingCost = Number(order.shippingCost || 0)
+
+        const totalGrand = Number(order.total + order.shippingCost || 0)
 
         const labelStatus =
           order.status === 'Cancelled'
@@ -125,7 +143,7 @@ const OrderFrontEnd = () => {
               </div>
               <div className='mt-3 sm:mt-0 flex items-center space-x-4'>
                 <p className='text-lg font-semibold text-gray-900'>
-                  {formatCurrency(order.total, 203)}
+                  {formatCurrency(totalGrand, 203)}
                 </p>
                 <span
                   className={`px-3 py-1 rounded-full text-sm font-medium ${classes}`}
@@ -196,6 +214,15 @@ const OrderFrontEnd = () => {
                   </div>
                 )
               })}
+
+              <div className='flex justify-between text-gray-600 mt-1'>
+                <span>{t('cart.shippingFee') || 'Phí vận chuyển'}</span>
+                <span className='font-semibold text-gray-900'>
+                  {shippingCost > 0
+                    ? formatCurrency(shippingCost, 203)
+                    : t('cart.free') || 'Miễn phí'}
+                </span>
+              </div>
 
               {/* Nút mở rộng */}
               {order.cartItems.length > 2 && (

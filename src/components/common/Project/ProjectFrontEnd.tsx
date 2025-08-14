@@ -54,6 +54,20 @@ const ProjectFrontEnd = () => {
       onLoaded()
     }
   }, [isLoading, onLoading, onLoaded])
+
+  if (!isLoading && totalItems === 0) {
+    return (
+      <div className='mb-20'>
+        <div className='flex flex-col items-center justify-center py-16 border rounded-3xl bg-white'>
+          <p className='text-gray-500 mt-1'>
+            {t('projects.emptyHint') ||
+              'Bạn chưa đặt đơn hàng nào. Tiếp tục mua sắm nhé!'}
+          </p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className='space-y-6 mb-20'>
       {projects.map(project => {

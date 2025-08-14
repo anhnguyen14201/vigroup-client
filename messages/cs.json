@@ -218,7 +218,8 @@
     "canceled": "Zrušeno",
     "cancelOrder": "Objednávka byla úspěšně zrušena!",
     "updateOrderFail": "Aktualizace stavu se nezdařila",
-    "updateOrderSuccess": "Chcete zrušit tuto objednávku?"
+    "updateOrderSuccess": "Chcete zrušit tuto objednávku?",
+    "emptyHint": "Zatím žádné objednávky"
   },
   "logoutdesc": "Opravdu se chcete odhlásit?",
 
@@ -267,6 +268,7 @@
     "jobDescription": "Popis práce",
     "estimatedQuantity": "Odhadované množství",
     "unitPrice": "Jednotková cena",
-    "totalAmount": "Celková částka"
+    "totalAmount": "Celková částka",
+    "emptyHint": "Zatím žádné projekty"
   }
 }

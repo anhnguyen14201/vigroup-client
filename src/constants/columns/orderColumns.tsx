@@ -59,10 +59,7 @@ export const getOrderColumns = (
     accessorKey: 'user',
     header: 'Người đặt',
     cell: ({ row }) => {
-      const user =
-        row.original.customer?.fullName ||
-        row.original.personalInfo?.fullName ||
-        '—'
+      const user = row.original.personalInfo?.fullName || '—'
       return <span className=''>{user}</span>
     },
   },

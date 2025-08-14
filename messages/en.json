@@ -235,7 +235,8 @@
     "canceled": "Canceled",
     "cancelOrder": "Order has been cancelled successfully!",
     "updateOrderFail": "Failed to update status",
-    "updateOrderSuccess": "Do you want to cancel this order?"
+    "updateOrderSuccess": "Do you want to cancel this order?",
+    "emptyHint": "No orders yet"
   },
 
   "logoutdesc": "Are you sure you want to log out?",
@@ -275,6 +276,7 @@
     "jobDescription": "Job Description",
     "estimatedQuantity": "Estimated Quantity",
     "unitPrice": "Unit Price",
-    "totalAmount": "Total Amount"
+    "totalAmount": "Total Amount",
+    "emptyHint": "No projects yet"
   }
 }

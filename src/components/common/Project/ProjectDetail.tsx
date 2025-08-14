@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { usePathname } from 'next/navigation'
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight, MapPin } from 'lucide-react'
 
 import {
   Breadcrumb as UIBreadcrumb,
@@ -15,9 +15,10 @@ import {
 import { routing } from '@/i18n'
 import { useGetContentTranslation } from '@/hooks'
 
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { Locale } from '@/interface'
 import ProjectSlider from '@/components/common/Project/ProjectSlider'
+import Link from 'next/link'
 
 interface ProductDetailProps {
   data: any
@@ -25,6 +26,8 @@ interface ProductDetailProps {
 
 const ProjectDetail = ({ data }: ProductDetailProps) => {
   const locale = useLocale() as Locale
+
+  const t = useTranslations()
 
   const pathname = usePathname()
   const pathSegments = pathname.split('/').filter(Boolean)
@@ -84,17 +87,22 @@ const ProjectDetail = ({ data }: ProductDetailProps) => {
 
           {/* Right: Details panel */}
           <div className='col-span-1'>
-            <div className='max-w-4xl flex flex-col lg:flex-row gap-8'>
+            <div className='max-w-4xl flex flex-col lg:flex-row gap-8 '>
               {/* Thông tin sản phẩm */}
               <div className='flex-1 flex flex-col'>
                 <div className='flex items-center mt-2'>
                   <span className='ml-2 text-gray-500 uppercase font-semibold text-sm'>
-                    {data.code}
+                    {data?.code}
                   </span>
                 </div>
-                <h1 className='text-3xl font-bold'>
+                <h1 className='text-3xl font-semibold'>
                   {productDetail?.projectName}
                 </h1>
+
+                <p className='ml-2 text-gray-500 uppercase font-semibold text-sm flex items-center gap-1'>
+                  <MapPin className='w-4 h-4' />
+                  {data?.location}
+                </p>
 
                 <div className='mt-4 items-baseline flex flex-col space-x-2'></div>
 
@@ -112,6 +120,20 @@ const ProjectDetail = ({ data }: ProductDetailProps) => {
                     }}
                   />
                 )}
+
+                <div className='w-full'>
+                  <Link href='/contact-us' passHref>
+                    <button
+                      type='button'
+                      aria-label='contact-us'
+                      className='mt-6 px-[35px] py-[15px] font-[400] capitalize cursor-pointer
+                               bg-[#C74242] text-[17px] text-white rounded-full
+                               hover:bg-white border hover:border-[#C74242] hover:text-[#C74242] transition'
+                    >
+                      {t('contact.GetinTouch')}
+                    </button>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

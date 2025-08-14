@@ -322,26 +322,19 @@ const OrderDetail = () => {
                 <p className='text-gray-600'>
                   <span className='font-medium'>Khách hàng:</span>{' '}
                   {orderData?.companyInfo?.companyName ||
-                    orderData?.personalInfo?.fullName ||
-                    orderData?.customer?.fullName}
+                    orderData?.personalInfo?.fullName}
                 </p>
                 <p className='text-gray-600'>
                   <span className='font-medium'>Email:&nbsp;</span>
-                  {orderData?.customer
-                    ? `${orderData?.customer?.email} `
-                    : `${orderData?.personalInfo?.email} `}
+                  {`${orderData?.personalInfo?.email} `}
                 </p>
                 <p className='text-gray-600'>
                   <span className='font-medium'>Số điện thoại:&nbsp;</span>
-                  {orderData?.customer
-                    ? `${orderData?.customer?.phone} `
-                    : `${orderData?.personalInfo?.phone} `}
+                  {`${orderData?.personalInfo?.phone} `}
                 </p>
                 <p className='text-gray-600'>
                   <span className='font-medium'>Địa chỉ giao hàng:&nbsp;</span>
-                  {orderData?.customer
-                    ? `${orderData?.customer?.street} ${orderData?.customer?.postalCode} ${orderData?.customer?.province}`
-                    : `${orderData?.personalInfo?.street} ${orderData?.personalInfo?.postalCode} ${orderData?.personalInfo?.province}`}
+                  {`${orderData?.personalInfo?.street} ${orderData?.personalInfo?.postalCode} ${orderData?.personalInfo?.province}`}
                 </p>
                 <div className='flex gap-20'>
                   <p className='text-gray-600'>

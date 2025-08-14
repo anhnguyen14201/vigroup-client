@@ -323,6 +323,7 @@ export default function PaymentPageClient(): ReactElement {
                     type='text'
                     value={personalInfo.fullName}
                     onChange={handlePersonalChange('fullName')}
+                    /* disabled={!!user?.token && !!personalInfo.fullName} */
                     className='w-full bg-[#f9f6f3]
                         rounded-full px-7 py-5 focus:ring-[#C74242] 
                         focus:outline-none text-[17px]'

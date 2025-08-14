@@ -238,7 +238,8 @@
     "canceled": "Đã hủy",
     "cancelOrder": "Hủy đơn hàng thành công!",
     "updateOrderFail": "Cập nhật trạng thái thất bại",
-    "updateOrderSuccess": "Bạn có muốn hủy đơn hàng này không?"
+    "updateOrderSuccess": "Bạn có muốn hủy đơn hàng này không?",
+    "emptyHint": "Chưa có đơn hàng"
   },
 
   "logoutdesc": "Bạn có chắc muốn đăng xuất không?",
@@ -277,6 +278,7 @@
     "jobDescription": "Nội dung công việc",
     "estimatedQuantity": "Khối lượng (tạm tính)",
     "unitPrice": "Đơn giá",
-    "totalAmount": "Thành tiền"
+    "totalAmount": "Thành tiền",
+    "emptyHint": "Chưa có dự án nào"
   }
 }
