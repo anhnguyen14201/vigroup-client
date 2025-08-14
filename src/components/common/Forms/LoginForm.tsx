@@ -40,6 +40,7 @@ const LoginForm = () => {
     async (data: ILoginForm) => {
       dispatch(setLoading({ key: 'Login', value: true }))
       nProgress.start()
+      let didRedirect = false
 
       try {
         const loginRes = await apiLogin(data)
@@ -66,13 +67,18 @@ const LoginForm = () => {
         const isEmp = role === 5131612152555
 
         if (isAdmin) {
-          router.replace('/admin/dashboard')
+          didRedirect = true
+          void router.replace('/admin/dashboard')
         } else if (isEmp) {
-          router.replace(`/employee`)
+          didRedirect = true
+          void router.replace(`/employee`)
         } else {
-          router.replace(`/account/user/${userId}`)
+          didRedirect = true
+          void router.replace(`/account/user/${userId}`)
         }
       } catch (err: any) {
+        nProgress.done()
+        dispatch(setLoading({ key: 'Login', value: false }))
         if (err.response?.status === 403) {
           toast.error(t('notification.accountLocked'))
         } else if (err.response?.status === 404) {
@@ -83,8 +89,10 @@ const LoginForm = () => {
           toast.error(t('notification.loginFailed'))
         }
       } finally {
-        nProgress.done()
-        dispatch(setLoading({ key: 'Login', value: false }))
+        if (!didRedirect) {
+          nProgress.done()
+          dispatch(setLoading({ key: 'Login', value: false }))
+        }
       }
     },
     [dispatch, router, t],

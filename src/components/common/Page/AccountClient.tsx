@@ -44,13 +44,16 @@ export default function AccountClient() {
     if (!isInitialized) return
 
     if (!token) {
-      router.replace('/account')
       return
     }
 
     if (!allowedRoles.includes(role)) {
       router.replace(`/account/user/${userId}`)
       return
+    }
+
+    if (allowedRoles.includes(role)) {
+      router.replace('/admin/dashboard')
     }
   }, [isInitialized, token, role, router, userId])
 
