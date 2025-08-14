@@ -66,7 +66,7 @@ const LoginForm = () => {
         const isAdmin = [3515, 1413914, 1311417518].includes(role)
         const isEmp = role === 5131612152555
 
-        /* if (isAdmin) {
+        if (isAdmin) {
           didRedirect = true
           void router.replace('/admin/dashboard')
         } else if (isEmp) {
@@ -75,7 +75,7 @@ const LoginForm = () => {
         } else {
           didRedirect = true
           void router.replace(`/account/user/${userId}`)
-        } */
+        }
       } catch (err: any) {
         nProgress.done()
         dispatch(setLoading({ key: 'Login', value: false }))

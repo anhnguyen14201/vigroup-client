@@ -54,6 +54,7 @@ export default function AccountClient() {
 
     if (allowedRoles.includes(role)) {
       router.replace('/admin/dashboard')
+      return
     }
   }, [isInitialized, token, role, router, userId])
 
