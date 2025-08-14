@@ -107,7 +107,7 @@ const ProjectSlider: React.FC<ProductDetailProps> = ({ data }) => {
               src={images[currentIndex]}
               alt={`Ảnh sản phẩm ${currentIndex + 1}`}
               fill
-              sizes='(max-width: 768px) 100vw, 50vw'
+              sizes='100vw'
               className='object-cover'
               quality={100}
               priority
@@ -165,6 +165,7 @@ const ProjectSlider: React.FC<ProductDetailProps> = ({ data }) => {
                 alt={`Thumbnail ${idx + 1}`}
                 fill
                 priority
+                quality={100}
                 sizes='(max-width: 768px) 100vw, 50vw'
                 className='object-cover'
               />
