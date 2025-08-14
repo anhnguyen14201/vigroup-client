@@ -39,9 +39,7 @@ export default async function AdminLayout({
                 </header>
                 <main className='flex flex-1'>
                   {/* <ProgressBar /> */}
-                  <ProgressProvider>
-                    <PageTransitionWrapper>{children}</PageTransitionWrapper>
-                  </ProgressProvider>
+                  <ProgressProvider>{children}</ProgressProvider>
                 </main>
               </SidebarInset>
             </SidebarProvider>
