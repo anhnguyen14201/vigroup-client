@@ -85,7 +85,7 @@ instance.interceptors.response.use(
       } catch (refreshError) {
         processQueue(refreshError, null)
         window.location.href = '/account'
-        store.dispatch(logout())
+        /* store.dispatch(logout()) */
         return Promise.reject(refreshError)
       } finally {
         isRefreshing = false
