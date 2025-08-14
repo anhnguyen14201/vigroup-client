@@ -84,32 +84,8 @@ instance.interceptors.response.use(
         }
       } catch (refreshError) {
         processQueue(refreshError, null)
-
-        try {
-          // Không bắt buộc, nhưng nếu server có revoke endpoint thì tốt
-          await apiLogout()
-        } catch (e) {
-          // ignore errors from logout api
-        }
-
-        // Xoá token client-side, update redux
+        window.location.href = '/account'
         store.dispatch(logout())
-
-        // Clear default Authorization header
-        delete instance.defaults.headers.common['Authorization']
-
-        // Clear any local storage related tokens (nếu bạn lưu)
-        try {
-          if (typeof window !== 'undefined') {
-            localStorage.removeItem('persistedToken') // tuỳ key bạn dùng
-          }
-        } catch (e) {}
-
-        // Redirect chỉ khi đang trên client
-        if (typeof window !== 'undefined') {
-          window.location.href = '/account' // hoặc '/login'
-        }
-
         return Promise.reject(refreshError)
       } finally {
         isRefreshing = false
