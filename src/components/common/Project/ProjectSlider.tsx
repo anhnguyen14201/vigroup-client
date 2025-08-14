@@ -109,6 +109,7 @@ const ProjectSlider: React.FC<ProductDetailProps> = ({ data }) => {
               fill
               sizes='(max-width: 768px) 100vw, 50vw'
               className='object-cover'
+              quality={100}
               priority
             />
           </motion.div>
