@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { apiRefreshToken } from '@/api/authApi'
-import { updateToken } from '@/redux'
+import { apiLogout, apiRefreshToken } from '@/api/authApi'
+import { logout, updateToken } from '@/redux'
 import { store } from '@/redux/redux'
 /* import { store } from '../Redux/redux'
 import { logout, updateToken } from '../Redux/UserStore/userStoreSlice'
@@ -13,6 +13,20 @@ const instance = axios.create({
 instance.defaults.withCredentials = true
 
 let isRefreshing = false
+type Subscriber = (token: string | null, error?: any) => void
+let subscribers: Subscriber[] = []
+
+const subscribeTokenRefresh = (cb: Subscriber) => {
+  subscribers.push(cb)
+}
+
+const onRefreshed = (token: string | null, error?: any) => {
+  subscribers.forEach(cb => cb(token, error))
+  subscribers = []
+}
+
+const raw = axios.create({ withCredentials: true })
+
 let failedQueue = [] as any
 
 const processQueue = (error: any, token = null) => {
@@ -56,7 +70,7 @@ instance.interceptors.response.use(
 
       originalReq._retry = true
       isRefreshing = true
-      try {
+      /*       try {
         const { data } = await apiRefreshToken()
         const newToken = data.accessToken
 
@@ -71,6 +85,48 @@ instance.interceptors.response.use(
       } catch (refreshError) {
         processQueue(refreshError, null)
         window.location.href = '/account'
+        return Promise.reject(refreshError)
+      } finally {
+        isRefreshing = false
+      } */
+
+      try {
+        // IMPORTANT: call refresh using a raw axios (without interceptors)
+        const { data } = await raw.post(
+          `${process.env.NEXT_PUBLIC_API_URI}/auth/refresh`,
+          {},
+          { withCredentials: true },
+        )
+        const newToken = (data as any)?.accessToken
+        if (!newToken) throw new Error('No token in refresh response')
+
+        // Cập nhật token toàn cục
+        store.dispatch(updateToken({ token: newToken }))
+        instance.defaults.headers.common.Authorization = `Bearer ${newToken}`
+
+        // Phát token cho queue
+        onRefreshed(newToken)
+
+        // Gọi lại request gốc với token mới
+        if (originalReq.headers) {
+          originalReq.headers.Authorization = `Bearer ${newToken}`
+        }
+        return instance(originalReq)
+      } catch (refreshError) {
+        console.log('refresh failed', refreshError)
+
+        processQueue(refreshError, null)
+        try {
+          await store.dispatch(logout() as any)
+        } catch (e) {
+          console.error('dispatch logout error', e)
+        }
+        try {
+          await apiLogout()
+        } catch (e) {
+          console.error('apiLogout error', e)
+        }
+
         return Promise.reject(refreshError)
       } finally {
         isRefreshing = false

@@ -1,8 +1,4 @@
-import {
-  IData,
-  ILoginForm,
-  IRegisterForm,
-} from '@/interface'
+import { IData, ILoginForm, IRegisterForm } from '@/interface'
 import axios from '../config/axios'
 
 export const apiRegister = (data: IRegisterForm) =>
