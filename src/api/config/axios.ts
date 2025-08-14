@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { apiLogout, apiRefreshToken } from '@/api/authApi'
-import { logout, updateToken } from '@/redux'
+import { apiRefreshToken } from '@/api/authApi'
+import { updateToken } from '@/redux'
 import { store } from '@/redux/redux'
 /* import { store } from '../Redux/redux'
 import { logout, updateToken } from '../Redux/UserStore/userStoreSlice'
@@ -13,20 +13,6 @@ const instance = axios.create({
 instance.defaults.withCredentials = true
 
 let isRefreshing = false
-type Subscriber = (token: string | null, error?: any) => void
-let subscribers: Subscriber[] = []
-
-const subscribeTokenRefresh = (cb: Subscriber) => {
-  subscribers.push(cb)
-}
-
-const onRefreshed = (token: string | null, error?: any) => {
-  subscribers.forEach(cb => cb(token, error))
-  subscribers = []
-}
-
-const raw = axios.create({ withCredentials: true })
-
 let failedQueue = [] as any
 
 const processQueue = (error: any, token = null) => {
@@ -85,7 +71,6 @@ instance.interceptors.response.use(
       } catch (refreshError) {
         processQueue(refreshError, null)
         window.location.href = '/account'
-        /* store.dispatch(logout()) */
         return Promise.reject(refreshError)
       } finally {
         isRefreshing = false
