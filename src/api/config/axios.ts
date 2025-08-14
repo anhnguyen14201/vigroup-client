@@ -70,7 +70,7 @@ instance.interceptors.response.use(
 
       originalReq._retry = true
       isRefreshing = true
-      /*       try {
+      try {
         const { data } = await apiRefreshToken()
         const newToken = data.accessToken
 
@@ -84,50 +84,32 @@ instance.interceptors.response.use(
         }
       } catch (refreshError) {
         processQueue(refreshError, null)
-        window.location.href = '/account'
-        return Promise.reject(refreshError)
-      } finally {
-        isRefreshing = false
-      } */
 
-      try {
-        // IMPORTANT: call refresh using a raw axios (without interceptors)
-        const { data } = await raw.post(
-          `${process.env.NEXT_PUBLIC_API_URI}/auth/refresh`,
-          {},
-          { withCredentials: true },
-        )
-        const newToken = (data as any)?.accessToken
-        if (!newToken) throw new Error('No token in refresh response')
-
-        // Cập nhật token toàn cục
-        store.dispatch(updateToken({ token: newToken }))
-        instance.defaults.headers.common.Authorization = `Bearer ${newToken}`
-
-        // Phát token cho queue
-        onRefreshed(newToken)
-
-        // Gọi lại request gốc với token mới
-        if (originalReq.headers) {
-          originalReq.headers.Authorization = `Bearer ${newToken}`
-        }
-        return instance(originalReq)
-      } catch (refreshError) {
-        console.log('refresh failed', refreshError)
-
-        processQueue(refreshError, null)
         try {
-          await store.dispatch(logout() as any)
-        } catch (e) {
-          console.error('dispatch logout error', e)
-        }
-        try {
+          // Không bắt buộc, nhưng nếu server có revoke endpoint thì tốt
           await apiLogout()
         } catch (e) {
-          console.error('apiLogout error', e)
+          // ignore errors from logout api
         }
 
-        /* window.location.href = '/account' */
+        // Xoá token client-side, update redux
+        store.dispatch(logout())
+
+        // Clear default Authorization header
+        delete instance.defaults.headers.common['Authorization']
+
+        // Clear any local storage related tokens (nếu bạn lưu)
+        try {
+          if (typeof window !== 'undefined') {
+            localStorage.removeItem('persistedToken') // tuỳ key bạn dùng
+          }
+        } catch (e) {}
+
+        // Redirect chỉ khi đang trên client
+        if (typeof window !== 'undefined') {
+          window.location.href = '/account' // hoặc '/login'
+        }
+
         return Promise.reject(refreshError)
       } finally {
         isRefreshing = false
