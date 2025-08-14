@@ -111,7 +111,7 @@ instance.interceptors.response.use(
           console.error('apiLogout error', e)
         }
 
-        window.location.href = '/account'
+        /* window.location.href = '/account' */
         return Promise.reject(refreshError)
       } finally {
         isRefreshing = false
