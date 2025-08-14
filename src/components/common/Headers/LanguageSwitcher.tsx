@@ -30,7 +30,8 @@ const LanguageSwitcher = () => {
 
   const changeLanguage = (lng: string) => {
     if (lng !== locale) {
-      router.push(`/${lng}/${currentPath}`)
+      router.replace(`/${lng}/${currentPath}`)
+      router.refresh()
     }
   }
 
