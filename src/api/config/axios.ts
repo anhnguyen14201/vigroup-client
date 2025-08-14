@@ -97,10 +97,20 @@ instance.interceptors.response.use(
           throw new Error('No token in refresh response')
         }
       } catch (refreshError) {
+        console.log('refresh failed', refreshError)
+
         processQueue(refreshError, null)
-        // clear auth state then redirect
-        store.dispatch(logout()) // hoặc dispatch logout action cụ thể
-        apiLogout()
+        try {
+          await store.dispatch(logout() as any)
+        } catch (e) {
+          console.error('dispatch logout error', e)
+        }
+        try {
+          await apiLogout()
+        } catch (e) {
+          console.error('apiLogout error', e)
+        }
+
         window.location.href = '/account'
         return Promise.reject(refreshError)
       } finally {

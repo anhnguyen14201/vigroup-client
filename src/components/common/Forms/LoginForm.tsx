@@ -66,11 +66,11 @@ const LoginForm = () => {
         const isEmp = role === 5131612152555
 
         if (isAdmin) {
-          await router.replace('/admin/dashboard')
+          router.replace('/admin/dashboard')
         } else if (isEmp) {
-          await router.replace(`/employee`)
+          router.replace(`/employee`)
         } else {
-          await router.replace(`/account/user/${userId}`)
+          router.replace(`/account/user/${userId}`)
         }
       } catch (err: any) {
         if (err.response?.status === 403) {

@@ -40,13 +40,15 @@ export default function AccountClient() {
   const allowedRoles = [3515, 1413914, 1311417518]
 
   useEffect(() => {
+    // chặn chạy redirect khi store chưa sẵn sàng
+    if (!isInitialized) return
+
     if (!token) {
-      // Không đăng nhập: chuyển hướng về trang đăng nhập
       router.replace('/account')
       return
     }
+
     if (!allowedRoles.includes(role)) {
-      // Yêu cầu là admin nhưng role không hợp lệ: chuyển hướng về trang user
       router.replace(`/account/user/${userId}`)
       return
     }
