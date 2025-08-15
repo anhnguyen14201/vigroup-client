@@ -45,7 +45,7 @@ const EmployeeSideBar = () => {
       dispatch(logout())
       await persistor.flush()
 
-      await router.push('/employee')
+      router.replace('/employee')
       // Đưa user về state chưa login
     } catch (error: any) {
       // Log ra console

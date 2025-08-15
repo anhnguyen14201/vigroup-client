@@ -64,16 +64,16 @@ const LoginForm = () => {
         const { role, _id: userId } = state?.currentUser?.current
 
         const isAdmin = [3515, 1413914, 1311417518].includes(role)
-        const isEmp = role === 5131612152555
 
         if (isAdmin) {
-          didRedirect = true
+          nProgress.done()
+          dispatch(setLoading({ key: 'Login', value: false }))
           router.replace('/admin/dashboard')
-        } else if (isEmp) {
           didRedirect = true
-          router.replace(`/employee`)
         } else {
-          didRedirect = true
+          if (!userId) throw new Error('Missing userId')
+          nProgress.done()
+          dispatch(setLoading({ key: 'Login', value: false }))
           router.replace(`/account/user/${userId}`)
         }
       } catch (err: any) {

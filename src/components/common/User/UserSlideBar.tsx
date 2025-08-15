@@ -53,7 +53,7 @@ const UserSlideBar = () => {
       await persistor.flush()
       await apiLogout()
       // Chuyển hướng về trang /account
-      router.push('/')
+      router.replace('/')
       // Đưa user về state chưa login
     } catch (error: any) {
       // Log ra console
@@ -69,7 +69,7 @@ const UserSlideBar = () => {
   const handleNav = async (href: string) => {
     nProgress.start()
     try {
-      await router.push(href)
+      router.push(href)
     } finally {
       nProgress.done()
     }

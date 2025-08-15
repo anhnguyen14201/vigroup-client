@@ -38,7 +38,7 @@ export function NavUser() {
     try {
       await apiLogout()
       dispatch(logout())
-      router.push('/')
+      router.replace('/')
       await persistor.flush()
     } catch (error: any) {
       // Optionally show a toast or error notification here
