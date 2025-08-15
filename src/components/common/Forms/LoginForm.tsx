@@ -67,12 +67,18 @@ const LoginForm = () => {
         const isEmp = role === 5131612152555
 
         if (isAdmin) {
+          nProgress.done()
+          dispatch(setLoading({ key: 'Login', value: false }))
           didRedirect = true
           void router.replace('/admin/dashboard')
         } else if (isEmp) {
+          nProgress.done()
+          dispatch(setLoading({ key: 'Login', value: false }))
           didRedirect = true
           void router.replace(`/employee`)
         } else {
+          nProgress.done()
+          dispatch(setLoading({ key: 'Login', value: false }))
           didRedirect = true
           void router.replace(`/account/user/${userId}`)
         }
