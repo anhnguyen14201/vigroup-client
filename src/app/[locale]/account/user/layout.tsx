@@ -1,6 +1,7 @@
 // app/account/user/layout.tsx
 'use client'
 import { AuthGuard, UserSlideBar } from '@/components'
+import { ProgressProvider } from '@/providers'
 import React from 'react'
 
 export default function UserLayout({
@@ -19,7 +20,9 @@ export default function UserLayout({
           <div className='flex w-full max-w-screen-2xl min-h-screen'>
             <UserSlideBar />
 
-            <main className='flex-1 p-5 bg-white'>{children}</main>
+            <main className='flex-1 p-5 bg-white'>
+              <ProgressProvider>{children}</ProgressProvider>
+            </main>
           </div>
         </div>
       </AuthGuard>
