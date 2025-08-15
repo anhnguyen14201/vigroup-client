@@ -91,6 +91,7 @@ const LoginForm = () => {
       } finally {
         if (!didRedirect) {
           nProgress.done()
+          console.log(didRedirect)
           dispatch(setLoading({ key: 'Login', value: false }))
         }
       }
