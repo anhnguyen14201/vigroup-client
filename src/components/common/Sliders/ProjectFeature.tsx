@@ -2,7 +2,7 @@
 
 import clsx from 'clsx'
 import { motion, useMotionValue, useAnimation } from 'framer-motion'
-import { ArrowUpRight, Building } from 'lucide-react'
+import { ArrowUpRight, Building, MapPin } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -196,9 +196,13 @@ const ProjectFeature = React.memo(
                             <h1 className='text-lg font-semibold truncate max-w-[calc(100%-116px)] mb-2'>
                               {title}
                             </h1>
-                            <p className='text-sm flex items-center gap-1'>
+                            <p className='text-sm flex items-center gap-1 truncate max-w-[calc(100%-116px)]'>
                               <Building className='w-4 h-4' />
                               {trans?.buildingType}
+                            </p>
+                            <p className='text-sm flex items-center gap-1 truncate max-w-[calc(100%-116px)]'>
+                              <MapPin className='w-4 h-4' />
+                              {template?.location}
                             </p>
                           </div>
                         </>

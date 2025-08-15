@@ -88,7 +88,7 @@ export function GenericForm<T extends FieldValues>(props: GenericFormProps<T>) {
       // Lọc những file hợp lệ
       const validFiles = newFiles.filter(
         f =>
-          ['image/jpeg', 'image/png'].includes(f.type) &&
+          ['image/jpeg', 'image/png', 'image/webp'].includes(f.type) &&
           f.size <= 5 * 1024 * 1024,
       )
       if (!validFiles.length) {
