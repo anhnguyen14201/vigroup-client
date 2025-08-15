@@ -83,8 +83,6 @@ const UserClient: React.FC = () => {
           ico: current.ico || '',
         })
       }
-      nProgress.done()
-      dispatch(setLoading({ key: 'Login', value: false }))
     }
   }, [current])
 

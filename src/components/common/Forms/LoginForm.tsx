@@ -72,9 +72,11 @@ const LoginForm = () => {
         } else if (isEmp) {
           didRedirect = true
           void router.replace(`/employee`)
+          router.refresh()
         } else {
           didRedirect = true
           void router.replace(`/account/user/${userId}`)
+          router.refresh()
         }
       } catch (err: any) {
         nProgress.done()
