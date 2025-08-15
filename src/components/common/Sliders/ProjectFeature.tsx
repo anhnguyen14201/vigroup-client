@@ -196,13 +196,18 @@ const ProjectFeature = React.memo(
                             <h1 className='text-lg font-semibold truncate max-w-[calc(100%-116px)] mb-2'>
                               {title}
                             </h1>
-                            <p className='text-sm flex items-center gap-1 truncate max-w-[calc(100%-130px)]'>
-                              <Building className='w-4 h-4' />
-                              {trans?.buildingType}
+                            <p className='text-sm flex items-center gap-1 max-w-[calc(100%-116px)]'>
+                              <Building className='w-4 h-4 flex-shrink-0' />
+                              <span className='truncate min-w-0'>
+                                {trans?.buildingType}
+                              </span>
                             </p>
-                            <p className='text-sm flex items-center gap-1 truncate max-w-[calc(100%-130px)]'>
-                              <MapPin className='w-4 h-4' />
-                              {template?.location}
+
+                            <p className='text-sm flex items-center gap-1 max-w-[calc(100%-116px)]'>
+                              <Building className='w-4 h-4 flex-shrink-0' />
+                              <span className='truncate min-w-0'>
+                                {template?.location}
+                              </span>
                             </p>
                           </div>
                         </>
