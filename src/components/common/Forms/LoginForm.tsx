@@ -64,18 +64,14 @@ const LoginForm = () => {
         const { role, _id: userId } = state?.currentUser?.current
 
         const isAdmin = [3515, 1413914, 1311417518].includes(role)
-        const isEmp = role === 5131612152555
-
-        nProgress.done()
-        dispatch(setLoading({ key: 'Login', value: false }))
+        const isUser = [32119201513518].includes(role)
 
         if (isAdmin) {
           didRedirect = true
           router.replace('/admin/dashboard')
-        } else if (isEmp) {
-          didRedirect = true
-          router.replace(`/employee`)
-        } else {
+        }
+
+        if (isUser) {
           didRedirect = true
           router.replace(`/account/user/${userId}`)
         }
@@ -91,13 +87,13 @@ const LoginForm = () => {
         } else {
           toast.error(t('notification.loginFailed'))
         }
-      } /* finally {
+      } finally {
         if (!didRedirect) {
           nProgress.done()
           console.log(didRedirect)
           dispatch(setLoading({ key: 'Login', value: false }))
         }
-      } */
+      }
     },
     [dispatch, router, t],
   )
