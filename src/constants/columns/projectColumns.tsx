@@ -63,9 +63,11 @@ export const getProjectColumns = (
     header: 'Tên dự án',
     cell: ({ row }) => {
       return (
-        <span className='capitalize'>
-          {row.original.translations[0].projectName}
-        </span>
+        <div className='truncate max-w-[350px]'>
+          <span className='capitalize'>
+            {row.original.translations[0].projectName}
+          </span>
+        </div>
       )
     },
   },
@@ -73,7 +75,9 @@ export const getProjectColumns = (
     accessorKey: 'location',
     header: 'Địa chỉ',
     cell: ({ row }) => (
-      <span className='capitalize'>{row.getValue('location')}</span>
+      <div className='truncate max-w-[200px]'>
+        <span className='capitalize'>{row.getValue('location')}</span>
+      </div>
     ),
   },
   {

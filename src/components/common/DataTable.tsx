@@ -157,7 +157,7 @@ const DataTable: React.FC<IDataTableProps> = ({
                 {hg.headers.map(h => (
                   <TableHead
                     key={h.id}
-                    className='px-4 py-2 whitespace-normal break-words'
+                    className='px-4 py-4 whitespace-normal break-words'
                   >
                     {!h.isPlaceholder &&
                       flexRender(h.column.columnDef.header, h.getContext())}

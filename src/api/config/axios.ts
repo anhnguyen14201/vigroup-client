@@ -70,25 +70,6 @@ instance.interceptors.response.use(
 
       originalReq._retry = true
       isRefreshing = true
-      /*       try {
-        const { data } = await apiRefreshToken()
-        const newToken = data.accessToken
-
-        if (data && newToken) {
-          store.dispatch(updateToken({ token: newToken }))
-          instance.defaults.headers.common[
-            'Authorization'
-          ] = `Bearer ${newToken}`
-          processQueue(null, newToken)
-          return instance(originalReq)
-        }
-      } catch (refreshError) {
-        processQueue(refreshError, null)
-        window.location.href = '/account'
-        return Promise.reject(refreshError)
-      } finally {
-        isRefreshing = false
-      } */
 
       try {
         // IMPORTANT: call refresh using a raw axios (without interceptors)
