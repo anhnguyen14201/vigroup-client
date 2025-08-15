@@ -4,12 +4,15 @@ import { useParams, useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 
-import { RootState } from '@/redux/redux'
+import { AppDispatch, RootState } from '@/redux/redux'
 import { AuthGuard, UserClient } from '@/components'
 import nProgress from 'nprogress'
+import { useDispatch } from 'react-redux'
+import { setLoading } from '@/redux'
 
 const UserPage = () => {
   const router = useRouter()
+  const dispatch = useDispatch<AppDispatch>()
   const params = useParams() as { locale: string; id: string }
   const token = useSelector((state: RootState) => state.currentUser.token)
   const userId = useSelector(
@@ -26,6 +29,7 @@ const UserPage = () => {
   useEffect(() => {
     if (token) {
       nProgress.done()
+      dispatch(setLoading({ key: 'Login', value: false }))
     }
   }, [token])
 
