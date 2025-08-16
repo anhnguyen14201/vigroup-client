@@ -246,20 +246,15 @@ const ProductDetail: React.FC<ProductDetailProps> = React.memo(
                   <button
                     type='button'
                     aria-label='add to cart'
-                    disabled={qty < 1}
                     onClick={() => handleAddToCart(productDetail)}
-                    className={`
-                              h-10
-                              ml-4
-                              px-6 rounded-full font-medium
-                              ${
-                                qty > 0
-                                  ? 'bg-[#C74242] text-white hover:text-[#C74242] border hover:border-[#C74242] hover:bg-white cursor-pointer'
-                                  : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                              }
-                              transition
-                              focus:outline-none
-                            `}
+                    className={clsx(
+                      data?.quantity <= 0 || data?.price <= 0
+                        ? 'cursor-not-allowed opacity-50'
+                        : 'cursor-pointer text-[17px]',
+                      'text-white py-2 px-10 rounded-full font-[400] duration-300 transition',
+                      'hover:text-[#C74242] hover:bg-white border hover:border-[#C74242] bg-[#C74242]',
+                    )}
+                    disabled={data?.quantity <= 0 || data?.price <= 0}
                   >
                     {t('addToCart')}
                   </button>

@@ -113,7 +113,7 @@ export default function useProductActions({
           formData.append('discount', values.discount)
           formData.append('categoryIds', values.categoryIds)
           formData.append('brandIds', values.brandIds)
-          formData.append('quantity', values.quantity)
+          formData.append('quantity', values.quantity || 0)
           formData.append(
             'removedImageUrls',
             JSON.stringify(values.removedImageUrls),
@@ -147,7 +147,7 @@ export default function useProductActions({
             price: values.price,
             tax: values.tax,
             discount: values.discount,
-            quantity: values.quantity,
+            quantity: values.quantity || 0,
             isFeatured: values.isFeatured,
             isNewArrival: values.isNewArrival,
             categoryIds: values.categoryIds,

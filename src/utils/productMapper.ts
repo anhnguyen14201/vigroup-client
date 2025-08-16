@@ -10,7 +10,7 @@ export const mapProductToForm = (
   init.price = prod.price ?? ''
   init.tax = prod.tax ?? ''
   init.discount = prod.discount ?? ''
-  init.quantity = prod.quantity ?? 0
+  init.quantity = prod.quantity || 0
   init.isFeatured = prod.isFeatured ?? false
   init.isNewArrival = prod.isNewArrival ?? false
 

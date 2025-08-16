@@ -121,12 +121,12 @@ const CartItem: React.FC<CartItemProps> = React.memo(({ product }) => {
         aria-label='add To Cart'
         onClick={() => handleAddToCart()}
         className={clsx(
-          (product?.quantity <= 0 || product?.price <= 0) &&
-            'cursor-not-allowed opacity-50 text-[17px]',
-          'mt-4 cursor-pointer text-white py-2 px-1 rounded-lg hover:text-[#C74242] ' +
-            ' font-[400] hover:bg-white border hover:border-[#C74242] bg-[#C74242] duration-300 transition',
+          product?.quantity <= 0 || product?.price <= 0
+            ? 'cursor-not-allowed opacity-50 text-[17px]'
+            : 'cursor-pointer text-[17px] hover:text-[#C74242] hover:bg-white hover:border-[#C74242]',
+          'mt-4 text-white py-2 px-1 rounded-lg font-[400] border bg-[#C74242] duration-300 transition',
         )}
-        disabled={product?.quantity <= 0 || product?.price <= 0} // Vô hiệu hóa nút khi không hợp lệ
+        disabled={product?.quantity <= 0 || product?.price <= 0}
       >
         {t('addToCart')}
       </button>
