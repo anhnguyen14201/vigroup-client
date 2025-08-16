@@ -204,7 +204,7 @@ const ProjectFeature = React.memo(
                             </p>
 
                             <p className='text-sm flex items-center gap-1 max-w-[calc(100%-116px)]'>
-                              <Building className='w-4 h-4 flex-shrink-0' />
+                              <MapPin className='w-4 h-4 flex-shrink-0' />
                               <span className='truncate min-w-0'>
                                 {template?.location}
                               </span>
