@@ -94,8 +94,6 @@ instance.interceptors.response.use(
         }
         return instance(originalReq)
       } catch (refreshError) {
-        console.log('refresh failed', refreshError)
-
         processQueue(refreshError, null)
         try {
           await store.dispatch(logout() as any)

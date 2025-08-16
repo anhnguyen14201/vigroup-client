@@ -37,8 +37,6 @@ const ProjectItem: React.FC<ProjectItemProps> = ({ templates, url }) => {
             ? template.thumbnailUrls[0]
             : ''
 
-          console.log(template)
-
           return (
             <motion.div
               key={template._id}
