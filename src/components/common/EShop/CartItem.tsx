@@ -38,6 +38,8 @@ const CartItem: React.FC<CartItemProps> = React.memo(({ product }) => {
     color: 'text-gray-500',
   }
 
+  console.log(label)
+
   const handleAddToCart = useCallback(() => {
     dispatch(addToCart({ productId: product._id, quantity: 1 }))
   }, [dispatch, product._id])
