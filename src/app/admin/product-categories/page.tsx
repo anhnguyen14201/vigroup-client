@@ -14,10 +14,10 @@ const ProductCategoryPage = () => {
             <ProductCategory />
           </div>
           <div className='break-inside-avoid'>
-            <Installation />
+            <BrandManager />
           </div>
           <div className='break-inside-avoid'>
-            <BrandManager />
+            <Installation />
           </div>
         </div>
       </div>
